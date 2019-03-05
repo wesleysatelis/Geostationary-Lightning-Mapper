@@ -4,7 +4,7 @@ library(stringr)
 library(geojsonio)
 library(sp)
 
-path <- "/home/wesley/Dropbox/IC Cepagri/GLM - Global Lightning Mapper/data"
+path <- "/home/wesley/Dropbox/IC Cepagri/Global-Lightning-Mapper/data"
 setwd(path)
 files <- list.files()
 files <- head(files, n=10000)

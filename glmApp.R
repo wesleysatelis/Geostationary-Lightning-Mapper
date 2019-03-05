@@ -3,7 +3,7 @@ library(leaflet)
 library(shiny)
 library(dplyr)
 # system dependencies "jq", "v8", "gdal", "proj", "geos", "udunits", "gcc-fortran"
-path <- "/home/wesley/Dropbox/IC Cepagri/GLM - Global Lightning Mapper/data/"
+path <- "/home/wesley/Dropbox/IC Cepagri/Global-Lightning-Mapper/data/"
 setwd(path)
 
 # states <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
@@ -28,7 +28,7 @@ server <- function(input, output, session) {
     # })
     
     # states <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
-    # class(states)
+    class(states)
     
     output$map <- renderLeaflet({
         # states <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
