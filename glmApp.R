@@ -92,7 +92,7 @@ server <- function(input, output, session) {
     
     observe({
         fileData <- reactiveFileReader(1, NULL,
-                                       '201812171233000G16.GLM--FLASH.txt',
+                                       '201812171908200G16.GLM--FLASH.txt',
                                        read_delim, delim=',', col_names=c("lat", "lon", "value"), col_types = c("ccc"))
         # pal <- colorpal()
         leafletProxy("map") %>%
