@@ -6,16 +6,17 @@ library(dplyr)
 path <- "/home/wesley/Dropbox/IC Cepagri/Global-Lightning-Mapper/data/"
 setwd(path)
 
+############ COLOR MAP FOR NUMBER OF INCIDENCES ############
 # states <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
-bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf)
-# pal <- colorNumeric("viridis", NULL)
-pal <- colorBin("YlOrRd", domain = states$id, bins = bins)
-labels <- sprintf("<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
-                  states$name, states$id) %>% lapply(htmltools::HTML)
+# bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf)
+# pal <- colorBin("YlOrRd", domain = states$id, bins = bins)
+# labels <- sprintf("<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+#                   states$name, states$id) %>% lapply(htmltools::HTML)
 
 ui <- bootstrapPage(
         tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
-        leafletOutput("map", width = "100%", height = "100%")
+        # leafletOutput("map", width = "80%", height = "100%"),
+        plotOutput("plot", width = "20%")
         # leafletOutput("estados", width = "100%", height = "100%")
         # textOutput("currentTime")
     )
@@ -26,9 +27,6 @@ server <- function(input, output, session) {
     #     invalidateLater(1000, session)
     #     paste("The current time is", Sys.time())
     # })
-    
-    # states <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
-    class(states)
     
     output$map <- renderLeaflet({
         # states <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
@@ -42,34 +40,16 @@ server <- function(input, output, session) {
             addTiles(options=providerTileOptions(minZoom=4.3))
     })
     
-    output$estados <- renderLeaflet({
-        leaflet(states) %>%
-        fitBounds(-73.99024, -33.75136, -32.390875, 5.270972) %>%
-        setMaxBounds(-73.99024, -33.75136, -32.390875, 5.270972) %>%
-        # addTiles() %>%
-        addTiles(options=providerTileOptions(minZoom=4.3)) %>%
-        addPolygons(fillColor = ~pal(id),
-                    weight = 2,
-                    opacity = 1,
-                    color = "red",
-                    dashArray = "3",
-                    fillOpacity = 1,
-                    highlight = highlightOptions(
-                        weight = 3,
-                        color = "red",
-                        dashArray = "",
-                        fillOpacity = 1,
-                        bringToFront = TRUE),
-                    label = labels,
-                    labelOptions = labelOptions(
-                        style = list("font-weight" = "normal", padding = "3px 8px"),
-                        textsize = "15px",
-                        direction = "auto")) %>%
-        addLegend(pal = pal, values = ~id, opacity = 0.7, title = NULL, position = "bottomright")
+    output$plot <- renderPlot({
+        estadosBrasil %>% ggplot(aes(x=state, y=n)) + geom_bar(stat="identity", width=0.5)
     })
 
-    # observe({
-    #     leafletProxy("map") %>%
+    ############ COLOR MAP FOR NUMBER OF INCIDENCES ############
+    # output$estados <- renderLeaflet({
+    #     leaflet(states) %>%
+    #     fitBounds(-73.99024, -33.75136, -32.390875, 5.270972) %>%
+    #     setMaxBounds(-73.99024, -33.75136, -32.390875, 5.270972) %>%
+    #     addTiles(options=providerTileOptions(minZoom=4.3)) %>%
     #     addPolygons(fillColor = ~pal(id),
     #                 weight = 2,
     #                 opacity = 1,

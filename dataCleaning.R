@@ -35,11 +35,10 @@ data <- data %>%
 # time1 <- end_time - start_time
 # start_time <- Sys.time()
 estados <- geojson_read("../geojsonBrasil/brazil-states.geojson",
+                        method="web",
                         what = "sp")
 # end_time <- Sys.time()
-# time2 <- end_time - start_time
-# time1
-# time2
+# end_time - start_time
 
 # compare points
 for (i in 1:nrow(data)) {
@@ -87,3 +86,14 @@ str(states@data)
 ##  $ ALBERS_SQM  : num  2.36e+09 8.01e+11 1.35e+12 1.73e+12 9.84e+11 ...
 ##  $ stateincome : num  2.90e+07 3.92e+08 8.56e+06 1.69e+08 6.11e+07 ...
 ##  $ avgstategift: num  48.8 64.9 45 54 50.7 ...
+
+
+estadosBrasil <- read_csv("../glmBrasil.csv") %>% 
+    select(state) %>%
+    group_by(state) %>% 
+    summarise(n=n())
+
+library(rjson)
+a <- fromJSON(estados, simplifyVector = TRUE,
+         simplifyDataFrame = simplifyVector, simplifyMatrix = simplifyVector,
+         flatten = FALSE, ...)
