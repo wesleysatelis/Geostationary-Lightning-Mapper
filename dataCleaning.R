@@ -1,5 +1,4 @@
 # This file must be running in the background at all times
-
 library(readr)
 library(dplyr)
 library(stringr)
@@ -10,22 +9,24 @@ library(sp)
 path <- "/home/wesley/Dropbox/IC Cepagri/Global-Lightning-Mapper/data"
 setwd(path)
 files <- list.files()
+# always sorts files in descending order
+files <- head(files, n=10)
 
 # Store this on memory so it doesn't have to be read every time
 estados <- geojson_read("../geojsonBrasil/brazil-states.geojson",
                         method="web",
                         what = "sp")
 
-data <- tibble(lat=as.numeric(), lon=as.numeric(), value=as.numeric(), filename=as.character())
+data <- tibble(lat=as.numeric(), lon=as.numeric(), value=as.numeric(), filename=as.character(), state=as.character())
 
 for (i in 1:length(files)){
-    newData <- read_delim(files[i], delim=',', col_names=c("lat", "lon", "value"), col_types = c("ccc")) %>% 
-        mutate(filename=files[i], state=NA, lat=as.numeric(lat), lon=as.numeric(lon))
+    newData <- read_csv(files[1], col_names=c("lat", "lon", "value"), col_types = cols(.default = "c")) %>% 
+        mutate(lat=as.numeric(lat), lon=as.numeric(lon), value=as.numeric(value), filename=files[i], state=NA)
     
-    data <- rbind(data, newData)
+    data <- bind_rows(data, newData)
 }
 
-data <- data %>% 
+data <- data %>%
     mutate(date=str_c(substr(filename, 1, 4), substr(filename, 5, 6), substr(filename, 7, 8), sep="-"),
            time=str_c(substr(filename, 9, 10), substr(filename, 11, 12), substr(filename, 13, 14), sep=":"),
            state=NA)
@@ -41,15 +42,14 @@ for (i in 1:nrow(data)) {
 }
 
 dataBrasil <- data %>% 
-    select(-filename) %>% 
+    select(-filename, -value) %>% 
     filter(!is.na(data$state))
-
-groups <- unique(numberIncidences$date)
 
 numberIncidences <- dataBrasil %>%
     group_by(state, date) %>% 
     summarise(n=n())
 
+groups <- unique(numberIncidences$date)
 
 for (i in groups){
     numberIncidences %>%

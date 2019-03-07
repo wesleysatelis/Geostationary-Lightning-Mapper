@@ -32,7 +32,7 @@ ui <- bootstrapPage(
 server <- function(input, output, session) {
     output$currentTime <- renderText({
         invalidateLater(1000, session)
-        paste("UTC time:", Sys.time())
+        paste("UTC Time Zone:", Sys.time())
     })
 
     output$map <- renderLeaflet({

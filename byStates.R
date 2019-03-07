@@ -39,7 +39,7 @@ ui <- bootstrapPage(
 server <- function(input, output, session) {
     output$currentTime <- renderText({
         invalidateLater(1000, session)
-        paste("Coordinated Universal Time (UTC):", Sys.time())
+        paste("UTC Time Zone:", Sys.time())
     })
     
     ############ COLOR MAP FOR NUMBER OF INCIDENCES ############
