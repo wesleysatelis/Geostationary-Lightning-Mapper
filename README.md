@@ -1,4 +1,4 @@
-# Global Lightning Mapper
+# Geostationary Lightning Mapper
 
 Shiny app using Leaflet to visualize real time lightning data provided by NOAA's GOES-16 satellite.
 
