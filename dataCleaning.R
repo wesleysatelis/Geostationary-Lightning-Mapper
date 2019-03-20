@@ -6,23 +6,18 @@ library(geojsonio)
 library(sp)
 
 # this path must be the one with only the new files
-path <- "/home/wesley/Dropbox/IC Cepagri/Global-Lightning-Mapper/data"
-setwd(path)
-files <- list.files()
-# always sorts files in descending order
-files <- head(files, n=10)
+path <- "/home/wesley/Dropbox/IC\ Cepagri/Geostationary-Lightning-Mapper"
+setwd(paste(path, "/data", sep=''))
 
 # Store this on memory so it doesn't have to be read every time
-estados <- geojson_read("../geojsonBrasil/brazil-states.geojson",
-                        method="web",
-                        what = "sp")
+estados <- geojsonio::geojson_read("../geojsonBrasil/brazil-states.geojson", what = "sp")
+files <- list.files()# %>% head(n=10)
 
 data <- tibble(lat=as.numeric(), lon=as.numeric(), value=as.numeric(), filename=as.character(), state=as.character())
 
 for (i in 1:length(files)){
-    newData <- read_csv(files[1], col_names=c("lat", "lon", "value"), col_types = cols(.default = "c")) %>% 
+    newData <- read_csv(files[i], col_names=c("lat", "lon", "value"), col_types = cols(.default = "c")) %>% 
         mutate(lat=as.numeric(lat), lon=as.numeric(lon), value=as.numeric(value), filename=files[i], state=NA)
-    
     data <- bind_rows(data, newData)
 }
 
@@ -33,6 +28,7 @@ data <- data %>%
 
 # compare points
 for (i in 1:nrow(data)) {
+    # print(i)
     coords <- c(data$lon[i], data$lat[i])
     if(any(is.na(coords))) next
     point <- sp::SpatialPoints(matrix(coords, nrow = 1))
@@ -56,6 +52,14 @@ for (i in groups){
         filter(date==i) %>%
         write_csv(paste("../incidenciasEstados/", i, ".csv", sep=""), append=TRUE)
 }
+
+############ Uncomment to get the number of accurances by hour and state ############
+# byHour <- dataBrasil %>%
+#     mutate(hour=substr(time, 1, 2)) %>% 
+#     group_by(state, hour) %>% 
+#     summarise(n=n()) %>% 
+#     spread(key=state, value=n) %>% 
+#     write_csv("../byHour.csv")
 
 ############ COLOR MAP FOR NUMBER OF INCIDENCES ############
 # save by day...
