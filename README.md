@@ -6,4 +6,4 @@ This project is currently being developed at the Center for Meteorological and C
 
 ![alt text](https://github.com/wesleysatelis/Global-Lightning-Mapper/blob/master/screenshots/Screenshot_2019-03-05%20Screenshot.png)
 
-For more information, please refer to www.cpa.unicamp.br
+Hosted at www.raios.cpa.unicamp.br
