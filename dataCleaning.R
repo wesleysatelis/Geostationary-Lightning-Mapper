@@ -6,7 +6,7 @@ library(geojsonio)
 library(sp)
 
 # this path must be the one with only the new files
-path <- "/home/wesley/Dropbox/IC\ Cepagri/Geostationary-Lightning-Mapper"
+path <- "../Geostationary-Lightning-Mapper"
 setwd(paste(path, "/data", sep=''))
 
 # Store this on memory so it doesn't have to be read every time

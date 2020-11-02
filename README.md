@@ -1,6 +1,6 @@
 # Geostationary Lightning Mapper
 
-Shiny app using Leaflet to visualize real time lightning data provided by NOAA's GOES-16 satellite.
+Shiny app for visualizing real time lightning data provided by NOAA's GOES-16 satellite.
 
 This project is currently being developed at the Center for Meteorological and Climate Research Applied to Agriculture (CEPAGRI), located at Embrapa inside the University of Campinas - Brazil.
 
